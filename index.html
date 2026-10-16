@@ -1,0 +1,1655 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark" data-size="md">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="LixzQuis IQ, platform kuis edukasi dengan sertifikat digital.">
+<title>LixzQuis IQ</title>
+<style>
+:root{
+  --bg:#0a1020; --panel:#101b35; --line:rgba(160,180,230,.14);
+  --text:#e8edf8; --muted:#8d9bbb;
+  --accent:#4f7cff; --accent-2:#8b6cff;
+  --ok:#33c28f; --bad:#f07283; --gold:#c9a25a;
+  --glass:rgba(18,30,60,.6);
+  --shadow:0 18px 40px -18px rgba(0,0,0,.6);
+}
+html[data-theme="light"]{
+  --bg:#f3f5fa; --panel:#ffffff; --line:rgba(20,30,60,.1);
+  --text:#0d1528; --muted:#5d6981;
+  --accent:#3363ff; --accent-2:#6f52f5;
+  --ok:#17a374; --bad:#d9485d;
+  --glass:rgba(255,255,255,.78);
+  --shadow:0 16px 36px -20px rgba(20,30,70,.25);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+html[data-size="sm"]{font-size:14.5px}
+html[data-size="lg"]{font-size:18px}
+body{
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.55;min-height:100vh;min-height:100dvh;
+  -webkit-font-smoothing:antialiased;
+}
+[hidden]{display:none!important}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+/* Tidak ada kotak biru saat ditekan. Fokus keyboard tetap terlihat dengan warna netral. */
+button:focus,a:focus{outline:none}
+button:focus-visible,a:focus-visible{outline:2px solid var(--text);outline-offset:3px;border-radius:8px}
+input:focus-visible{outline:none}
+h1,h2,h3{font-weight:650;letter-spacing:-.01em;line-height:1.2}
+h1{font-size:clamp(1.6rem,4vw,2.3rem)}
+h2{font-size:1.15rem}
+h3{font-size:1rem}
+.ico{width:20px;height:20px;flex:none}
+.muted{color:var(--muted)}
+.small{font-size:.85rem}
+.eyebrow{font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:.4rem}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.glass{background:var(--glass);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border:1px solid var(--line);box-shadow:var(--shadow)}
+.logo{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex:none;background:linear-gradient(135deg,#3f6bff,#8b6cff);box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
+.logo svg{width:18px;height:18px}
+
+/* Tombol */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:12px;font-weight:600;font-size:.95rem;transition:transform .15s,background .2s,box-shadow .2s,opacity .2s;white-space:nowrap}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:scale(.985)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;box-shadow:0 10px 24px -12px var(--accent)}
+.btn.ghost{border:1px solid var(--line);background:var(--panel)}
+.btn.danger{background:var(--bad);color:#fff}
+.btn.small{padding:8px 13px;font-size:.84rem;border-radius:10px}
+.btn.block{width:100%}
+.link{color:var(--accent);font-weight:600;font-size:.9rem}
+.spinner{width:18px;height:18px;border-radius:50%;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;animation:spin .8s linear infinite;display:inline-block}
+.spinner.dark{border-color:var(--line);border-top-color:var(--accent);width:28px;height:28px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---------- AUTH ---------- */
+.auth{min-height:100dvh;display:grid;place-items:center;padding:24px 18px;padding-top:max(24px,env(safe-area-inset-top));padding-bottom:max(24px,env(safe-area-inset-bottom))}
+.auth-wrap{width:min(940px,100%);display:grid;gap:30px}
+@media(min-width:840px){.auth-wrap{grid-template-columns:1.1fr .9fr;align-items:center}}
+.auth-brand .logo{width:46px;height:46px;border-radius:14px;margin-bottom:22px}
+.auth-brand .logo svg{width:24px;height:24px}
+.auth-brand h1{font-size:clamp(2rem,5vw,3rem)}
+.auth-brand p{color:var(--muted);max-width:42ch;margin-top:12px}
+.auth-points{list-style:none;margin-top:26px;display:grid;gap:10px;color:var(--muted);font-size:.92rem}
+.auth-points li{display:flex;gap:10px;align-items:center}
+.auth-points .ico{width:18px;height:18px;color:var(--accent)}
+.auth-card{padding:26px;border-radius:22px}
+.auth-card .sub{color:var(--muted);font-size:.9rem;margin:4px 0 20px}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:4px;margin-bottom:22px}
+.seg button{padding:10px;border-radius:9px;color:var(--muted);font-weight:600;transition:background .2s,color .2s}
+.seg button.active{background:var(--accent);color:#fff}
+.field{display:grid;gap:7px;margin-bottom:16px}
+.field label{font-size:.88rem;font-weight:550}
+.field input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);transition:border-color .2s,box-shadow .2s}
+.field input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 18%,transparent)}
+.field input[aria-invalid="true"]{border-color:var(--bad)}
+.pw{position:relative}
+.pw input{padding-right:50px}
+.pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);padding:8px;color:var(--muted);border-radius:8px;display:grid;place-items:center}
+.err{color:var(--bad);font-size:.82rem}
+.err:empty{display:none}
+.hint{font-size:.8rem;color:var(--muted)}
+.register-only{display:none!important}
+.is-register .register-only{display:grid!important}
+.check{display:flex;gap:10px;align-items:center;font-size:.9rem;color:var(--muted);margin:4px 0 20px}
+.check input{width:18px;height:18px;accent-color:var(--accent)}
+.auth-foot{margin-top:18px;font-size:.8rem;color:var(--muted);text-align:center}
+
+/* ---------- APP SHELL ---------- */
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 18px;padding-top:calc(10px + env(safe-area-inset-top));background:var(--glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand-name{font-weight:700;display:block;line-height:1.15}
+.greet{font-size:.78rem;color:var(--muted);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top-actions{display:flex;align-items:center;gap:10px}
+.avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:.8rem;color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent-2));flex:none}
+.avatar.lg{width:64px;height:64px;font-size:1.3rem}
+.icon-btn{width:42px;height:42px;display:grid;place-items:center;border-radius:12px;border:1px solid var(--line);background:var(--panel);flex:none;transition:transform .15s}
+.icon-btn:active{transform:scale(.95)}
+.icon-btn .ico{width:20px;height:20px}
+.app.public .avatar,.app.public #menuBtn,.app.public .tabbar,.app.public .greet{display:none}
+
+.stage{width:min(960px,100%);margin:0 auto;padding:20px 18px calc(110px + env(safe-area-inset-bottom))}
+.view{display:none}
+.view.active{display:block;animation:viewIn .35s cubic-bezier(.2,.7,.2,1)}
+@keyframes viewIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+html.reduce-motion *,html.reduce-motion *::before,html.reduce-motion *::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
+
+/* Layar sub-menu: tanpa navbar bawah, hanya satu layar satu menu */
+.screen-head{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.screen-head h1{font-size:clamp(1.4rem,3.6vw,2rem)}
+.screen-head .eyebrow{margin-bottom:.2rem}
+.screen-head>div{min-width:0}
+
+.tabbar{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(560px,100%);z-index:30;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:8px 12px calc(10px + env(safe-area-inset-bottom));background:var(--glass);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);border:1px solid var(--line);border-bottom:0;border-radius:22px 22px 0 0;box-shadow:0 -10px 30px -18px rgba(0,0,0,.5)}
+.app.in-run .tabbar,.app.subscreen .tabbar{display:none}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;border-radius:14px;color:var(--muted);font-size:.74rem;font-weight:550;position:relative;transition:color .2s,background .2s}
+.nav-btn .ico{width:22px;height:22px}
+.nav-btn.active{color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.nav-btn.active::before{content:"";position:absolute;top:-9px;left:30%;right:30%;height:3px;border-radius:0 0 3px 3px;background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+
+/* ---------- HAMBURGER MENU ---------- */
+.scrim{position:fixed;inset:0;background:rgba(3,6,16,.5);z-index:40;opacity:0;pointer-events:none;transition:opacity .25s}
+.scrim.show{opacity:1;pointer-events:auto}
+.menu{position:fixed;top:0;right:0;height:100dvh;width:min(360px,88vw);z-index:45;background:var(--panel);border-left:1px solid var(--line);transform:translateX(104%);transition:transform .32s cubic-bezier(.2,.7,.2,1);display:flex;flex-direction:column;padding:calc(18px + env(safe-area-inset-top)) 16px calc(18px + env(safe-area-inset-bottom));box-shadow:var(--shadow)}
+.menu.open{transform:none}
+.menu-head{display:flex;align-items:center;gap:12px;padding:6px 4px 16px;border-bottom:1px solid var(--line);margin-bottom:10px}
+.who{min-width:0;flex:1}
+.who strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.who small{color:var(--muted);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.menu-list{list-style:none;display:grid;gap:2px;overflow:auto;flex:1}
+.menu-item{width:100%;display:flex;align-items:center;gap:14px;padding:12px 10px;border-radius:12px;text-align:left;color:var(--text);transition:background .2s}
+.menu-item:hover{background:color-mix(in srgb,var(--accent) 8%,transparent)}
+.menu-item .ico{color:var(--accent)}
+.menu-item.danger,.menu-item.danger .ico{color:var(--bad)}
+
+/* ---------- HOME ---------- */
+.hero{padding:10px 0 24px;display:grid;gap:12px}
+.lead{color:var(--muted);max-width:56ch}
+.cta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:4px 12px;padding:6px 0 24px;border-bottom:1px solid var(--line);margin-bottom:30px}
+@media(min-width:720px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stat{padding:14px 4px;display:grid;gap:2px}
+.stat span{font-size:.8rem;color:var(--muted)}
+.stat strong{font-size:1.6rem;font-weight:650;letter-spacing:-.02em}
+.sec{margin-bottom:36px}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:12px}
+.cat-list{list-style:none}
+.cat-list li+li{border-top:1px solid var(--line)}
+.cat-row{width:100%;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:14px 4px;text-align:left;transition:padding .2s}
+.cat-row:hover{padding-left:10px}
+.cat-row>.ico{color:var(--accent)}
+.cat-text strong{display:block}
+.cat-text small{color:var(--muted);display:block;font-size:.85rem}
+.cat-meta{font-size:.78rem;color:var(--muted);text-align:right;white-space:nowrap}
+.list{list-style:none;display:grid;gap:8px}
+.row-item{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:14px 16px;border-radius:14px;background:var(--panel);border:1px solid var(--line);flex-wrap:wrap}
+.row-item strong{display:block}
+.row-item small{color:var(--muted)}
+.row-end{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.score{font-weight:700;font-size:1.1rem}
+.pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.74rem;font-weight:650;white-space:nowrap}
+.pill.ok{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok)}
+.pill.bad{background:color-mix(in srgb,var(--bad) 16%,transparent);color:var(--bad)}
+.empty{display:grid;justify-items:center;text-align:center;gap:10px;padding:34px 20px;border:1px dashed var(--line);border-radius:18px;color:var(--muted)}
+.empty .ico{width:40px;height:40px;color:var(--accent)}
+.empty h3{color:var(--text)}
+.note-box{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px;background:var(--panel);border:1px solid var(--line);font-size:.88rem;color:var(--muted)}
+.note-box .ico{color:var(--accent);width:18px;height:18px;margin-top:2px}
+.note-box b{color:var(--text)}
+.cert-section{display:grid;gap:22px;scroll-margin-top:90px}
+@media(min-width:860px){.cert-section{grid-template-columns:1fr 1.1fr;align-items:center}}
+.preview-wrap{padding:14px;border-radius:20px}
+.search{display:flex;gap:8px;margin-top:14px}
+.search input{flex:1;min-width:0;padding:11px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);text-transform:uppercase;letter-spacing:.04em}
+.search input::placeholder{text-transform:none;letter-spacing:0}
+.search input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 18%,transparent)}
+
+/* ---------- CERTIFICATE ---------- */
+.cert{position:relative;container-type:inline-size;aspect-ratio:1.414/1;background:linear-gradient(160deg,#fffdf7,#f7f1e3);color:#0c1a3a;border-radius:6px;box-shadow:0 20px 40px -22px rgba(0,0,0,.6);overflow:hidden;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.cert-frame{position:absolute;inset:3.2cqw;border:.35cqw solid #0c1a3a;padding:3cqw 4cqw;display:flex;flex-direction:column;text-align:center}
+.cert-frame::before{content:"";position:absolute;inset:.9cqw;border:.25cqw solid var(--gold);pointer-events:none}
+.cert-top{display:flex;align-items:center;justify-content:center;gap:1.4cqw;font-weight:700;font-size:2.2cqw;letter-spacing:.08em}
+.cert-top .logo{width:5cqw;height:5cqw;border-radius:1.4cqw}
+.cert-top .logo svg{width:2.8cqw;height:2.8cqw}
+.cert-title{margin-top:2.4cqw;font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:3.2cqw;letter-spacing:.3em}
+.cert-given{margin-top:1.6cqw;font-size:1.7cqw;color:#5b6378;font-style:italic;font-family:Georgia,serif}
+.cert-name{margin-top:1cqw;align-self:center;font-family:Georgia,"Times New Roman",serif;font-size:4.6cqw;border-bottom:.2cqw solid var(--gold);padding:0 4cqw .7cqw}
+.cert-body{margin:1.6cqw auto 0;font-size:1.7cqw;color:#2b3550;line-height:1.5;max-width:82%}
+.cert-body b{color:#0c1a3a}
+.cert-row{margin-top:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:2cqw;font-size:1.6cqw}
+.cert-row small{display:block;font-size:1.05cqw;letter-spacing:.12em;text-transform:uppercase;color:#7a8299}
+.cert-row span{font-weight:600}
+.cert-foot{display:flex;justify-content:space-between;align-items:flex-end;margin-top:2cqw;gap:2cqw}
+.code-box{text-align:left;border:.18cqw dashed #9aa3b8;padding:1cqw 1.6cqw}
+.code-box small{display:block;font-size:1cqw;letter-spacing:.12em;text-transform:uppercase;color:#7a8299}
+.code-box span{font-family:"Courier New",monospace;font-weight:700;font-size:1.8cqw;letter-spacing:.04em}
+.sign{text-align:center;display:grid;justify-items:center;min-width:24cqw}
+.sig-hand{display:block;font-family:"Segoe Script","Lucida Handwriting","Brush Script MT","Snell Roundhand",cursive;font-style:italic;font-size:3.6cqw;line-height:1;color:#1b2a5c;transform:rotate(-5deg);padding:0 1cqw .2cqw;border-bottom:.15cqw solid #0c1a3a;min-width:16cqw}
+.sig-name{display:block;font-weight:700;font-size:1.5cqw;margin-top:.6cqw;letter-spacing:.04em}
+.sign small{font-size:1cqw;color:#7a8299;letter-spacing:.06em}
+.cert-stamp{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-18deg);font-size:6cqw;font-weight:800;letter-spacing:.1em;color:rgba(12,26,58,.12);white-space:nowrap;pointer-events:none}
+.cert-page{display:grid;gap:18px;justify-items:center}
+.cert-stage{width:min(860px,100%)}
+.cert-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.cert-page .note-box{max-width:860px;width:100%}
+.modal-cert{width:100%}
+
+/* ---------- KATALOG KUIS ---------- */
+.page-head{margin-bottom:24px;display:grid;gap:8px}
+.page-head.center{text-align:center;justify-items:center}
+.quiz-grid{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:760px){.quiz-grid{grid-template-columns:1fr 1fr}}
+.quiz-card{padding:22px;border-radius:20px;background:var(--panel);border:1px solid var(--line);display:grid;gap:12px;align-content:start}
+.qc-top{display:flex;align-items:center;gap:10px}
+.qc-top .ico{color:var(--accent);width:24px;height:24px}
+.tag{font-size:.74rem;color:var(--muted);border:1px solid var(--line);padding:2px 10px;border-radius:999px}
+.quiz-card p{color:var(--muted);font-size:.93rem}
+.qc-meta{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.qc-meta dt{font-size:.7rem;color:var(--muted)}
+.qc-meta dd{font-weight:650;font-size:.88rem}
+.qc-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+
+/* ---------- PENGERJAAN KUIS ---------- */
+.run-head{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.run-title-wrap{min-width:0;flex:1}
+.run-title{font-size:1.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.timer{display:grid;justify-items:end;padding:7px 12px;border-radius:12px;border:1px solid var(--line);background:var(--panel);font-variant-numeric:tabular-nums;flex:none}
+.timer span{font-weight:700;font-size:1.02rem;display:flex;gap:6px;align-items:center}
+.timer .ico{width:16px;height:16px}
+.timer.warn{color:var(--bad);border-color:var(--bad)}
+.timer small{color:var(--muted);font-size:.7rem}
+.run-meta{display:flex;justify-content:space-between;font-size:.88rem;color:var(--muted);margin-bottom:8px;gap:12px}
+.progress{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin-bottom:22px}
+.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .4s ease;border-radius:inherit}
+.question{padding:24px;border-radius:20px;margin-bottom:16px}
+.q-text{font-size:clamp(1.02rem,2.6vw,1.25rem);font-weight:600;line-height:1.45}
+.options{display:grid;gap:10px;margin-bottom:18px}
+.opt{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:var(--panel);text-align:left;transition:border-color .2s,background .2s,transform .15s}
+.opt:hover{border-color:color-mix(in srgb,var(--accent) 50%,transparent);transform:translateX(3px)}
+.opt-letter{width:32px;height:32px;flex:none;border-radius:10px;display:grid;place-items:center;font-weight:700;font-size:.85rem;background:var(--bg);border:1px solid var(--line)}
+.opt.selected{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--panel))}
+.opt.selected .opt-letter{background:var(--accent);color:#fff;border-color:var(--accent)}
+.dots{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-bottom:20px}
+.dot{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);font-size:.8rem;font-weight:600;color:var(--muted);transition:background .2s}
+.dot.answered{color:var(--text);background:color-mix(in srgb,var(--ok) 14%,transparent);border-color:color-mix(in srgb,var(--ok) 40%,transparent)}
+.dot.current{border-color:var(--text);color:var(--text);box-shadow:inset 0 0 0 1px var(--text)}
+.run-nav{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.run-warn{font-size:.85rem;color:var(--muted);text-align:center;margin-bottom:12px;min-height:1.2em}
+
+/* ---------- HASIL ---------- */
+.result-hero{display:flex;flex-wrap:wrap;gap:28px;align-items:center;justify-content:center;padding:26px;border-radius:24px;margin-bottom:22px}
+.ring{position:relative;width:180px;height:180px;flex:none}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:var(--line);stroke-width:8}
+.ring-fg{fill:none;stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1.1s cubic-bezier(.2,.7,.2,1)}
+.ring.pass .ring-fg{stroke:var(--ok)}
+.ring.fail .ring-fg{stroke:var(--bad)}
+.ring-val{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.ring-val strong{font-size:2.6rem;line-height:1;letter-spacing:-.03em}
+.ring-val small{color:var(--muted)}
+.result-side{display:grid;gap:10px;max-width:42ch;justify-items:start}
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:22px}
+@media(min-width:700px){.stat-grid{grid-template-columns:repeat(3,1fr)}}
+.stat-grid div{padding:14px;border-radius:14px;background:var(--panel);border:1px solid var(--line)}
+.stat-grid dt{font-size:.78rem;color:var(--muted)}
+.stat-grid dd{font-weight:650;font-size:1rem}
+.result-actions{display:grid;gap:10px;grid-template-columns:1fr}
+@media(min-width:640px){.result-actions{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}}
+.center-link{display:block;margin:14px auto 0}
+
+/* ---------- CREDIT ---------- */
+.credit{display:grid;gap:34px}
+@media(min-width:800px){.credit{grid-template-columns:1.05fr .95fr;align-items:start}}
+.credit h1{font-size:clamp(2.2rem,6vw,3.5rem);letter-spacing:-.03em;margin-bottom:14px}
+.credit dl>div{padding:15px 0;border-top:1px solid var(--line);display:grid;grid-template-columns:150px 1fr;gap:12px}
+.credit dl>div:last-child{border-bottom:1px solid var(--line)}
+.credit dt{color:var(--muted);font-size:.88rem}
+.credit dd{font-size:.95rem}
+@media(max-width:520px){.credit dl>div{grid-template-columns:1fr;gap:3px}}
+
+/* ---------- PENGATURAN & BANTUAN ---------- */
+.set-block{display:grid;gap:14px;margin-bottom:24px}
+.field-set{border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:grid;gap:8px;background:var(--panel)}
+.field-set legend{padding:0 6px;font-size:.88rem;font-weight:600}
+.radio{display:flex;gap:10px;align-items:center;font-size:.95rem}
+.radio input{accent-color:var(--accent);width:18px;height:18px}
+.field-inline{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:.95rem;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:var(--panel)}
+.field-inline select{padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg)}
+.help-block{display:grid;gap:6px;padding:16px 0;border-top:1px solid var(--line)}
+.help-block p{color:var(--muted)}
+.profile{display:flex;gap:16px;align-items:center;padding:20px;border-radius:20px;background:var(--panel);border:1px solid var(--line);margin-bottom:20px}
+.profile strong{font-size:1.15rem;display:block;overflow-wrap:anywhere}
+.profile span{color:var(--muted);overflow-wrap:anywhere}
+
+/* ---------- MODAL, TOAST, BUSY ---------- */
+.modal-wrap{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:18px;background:rgba(3,6,16,.55);opacity:0;transition:opacity .2s}
+.modal-wrap.show{opacity:1}
+.modal{width:min(480px,100%);max-height:88dvh;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);transform:translateY(12px) scale(.98);transition:transform .25s cubic-bezier(.2,.7,.2,1)}
+.modal-wrap.show .modal{transform:none}
+.modal.wide{width:min(760px,100%)}
+.modal-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px 14px 20px;border-bottom:1px solid var(--line)}
+.modal-body{padding:20px;overflow:auto;display:grid;gap:14px}
+.modal-foot{padding:14px 20px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+.modal-foot .btn{flex:1 1 auto}
+.toasts{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(96px + env(safe-area-inset-bottom));z-index:80;display:grid;gap:8px;width:min(420px,calc(100% - 32px))}
+.toast{display:flex;gap:10px;align-items:center;padding:12px 14px;border-radius:14px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow);font-size:.9rem;animation:toastIn .3s ease}
+.toast.out{opacity:0;transition:opacity .3s}
+.toast.success .ico{color:var(--ok)}
+.toast.error .ico{color:var(--bad)}
+.toast.info .ico{color:var(--accent)}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.busy{position:fixed;inset:0;z-index:90;display:grid;place-items:center;background:rgba(3,6,16,.4)}
+.busy-card{display:grid;justify-items:center;gap:12px;padding:22px 26px;border-radius:18px;background:var(--panel);border:1px solid var(--line)}
+
+/* ---------- CETAK / UNDUH PDF ---------- */
+#printArea{display:none}
+@page{size:A4 landscape;margin:0}
+@media print{
+  body *{visibility:hidden}
+  #printArea,#printArea *{visibility:visible}
+  #printArea{display:grid!important;position:absolute;left:0;top:0;width:297mm;height:210mm;place-items:center;background:#fff}
+  #printArea .cert{width:277mm;box-shadow:none;border-radius:0}
+}
+</style>
+</head>
+<body>
+
+<main id="auth" class="auth" hidden>
+  <div class="auth-wrap">
+    <section class="auth-brand">
+      <span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg></span>
+      <h1>LixzQuis IQ</h1>
+      <p>Uji pengetahuanmu dengan kuis terstruktur, penilaian yang transparan, dan sertifikat digital untuk setiap pencapaian.</p>
+      <ul class="auth-points">
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Enam bidang kuis, masing-masing 30 soal</li>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Riwayat setiap percobaan tersimpan di database</li>
+        <li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Sertifikat digital dengan kode yang dapat dicari</li>
+      </ul>
+    </section>
+
+    <section class="auth-card glass" id="authCard">
+      <div class="seg" role="tablist" aria-label="Mode autentikasi">
+        <button type="button" role="tab" data-auth-mode="login" class="active" aria-selected="true">Masuk</button>
+        <button type="button" role="tab" data-auth-mode="register" aria-selected="false">Daftar</button>
+      </div>
+      <h2 id="authTitle">Masuk ke akun Anda</h2>
+      <p class="sub" id="authSub">Gunakan email dan password yang sudah terdaftar.</p>
+
+      <form id="authForm" novalidate>
+        <div class="field register-only">
+          <label for="fName">Nama lengkap</label>
+          <input id="fName" type="text" autocomplete="name" maxlength="60">
+          <p class="err" id="eName"></p>
+        </div>
+        <div class="field">
+          <label for="fEmail">Email</label>
+          <input id="fEmail" type="email" autocomplete="email" maxlength="120">
+          <p class="err" id="eEmail"></p>
+        </div>
+        <div class="field">
+          <label for="fPass">Password</label>
+          <div class="pw">
+            <input id="fPass" type="password" autocomplete="current-password" maxlength="64">
+            <button type="button" class="pw-toggle" data-toggle="fPass" aria-label="Tampilkan password" aria-pressed="false"></button>
+          </div>
+          <p class="err" id="ePass"></p>
+          <p class="hint register-only">Minimal 8 karakter dengan huruf dan angka.</p>
+        </div>
+        <div class="field register-only">
+          <label for="fConfirm">Konfirmasi password</label>
+          <div class="pw">
+            <input id="fConfirm" type="password" autocomplete="new-password" maxlength="64">
+            <button type="button" class="pw-toggle" data-toggle="fConfirm" aria-label="Tampilkan konfirmasi password" aria-pressed="false"></button>
+          </div>
+          <p class="err" id="eConfirm"></p>
+        </div>
+        <label class="check"><input type="checkbox" id="fRemember" checked> Ingat sesi di perangkat ini</label>
+        <button class="btn primary block" id="submitBtn" type="submit">
+          <span class="spinner" id="submitSpin" hidden></span>
+          <span id="submitLabel">Masuk</span>
+        </button>
+      </form>
+      <p class="auth-foot">Sesi disimpan di perangkat ini. Password tidak pernah disimpan dalam bentuk teks biasa.</p>
+    </section>
+  </div>
+</main>
+
+<div id="app" class="app" hidden>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg></span>
+      <div style="min-width:0">
+        <span class="brand-name">LixzQuis IQ</span>
+        <span class="greet" id="greetLine"></span>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="avatar" id="avatar" data-menu="profile" aria-label="Buka profil"></button>
+      <button class="icon-btn" id="menuBtn" aria-label="Buka menu" aria-expanded="false" aria-controls="menuPanel"></button>
+    </div>
+  </header>
+
+  <main class="stage">
+    <section class="view" data-view="home" id="view-home" aria-label="Beranda"></section>
+    <section class="view" data-view="quiz" id="view-quiz" aria-label="Katalog kuis"></section>
+    <section class="view" data-view="run" id="view-run" aria-label="Pengerjaan kuis"></section>
+    <section class="view" data-view="result" id="view-result" aria-label="Hasil kuis"></section>
+    <section class="view" data-view="cert" id="view-cert" aria-label="Sertifikat"></section>
+    <section class="view" data-view="profile" id="view-profile" aria-label="Profil"></section>
+    <section class="view" data-view="history" id="view-history" aria-label="Riwayat kuis"></section>
+    <section class="view" data-view="certs" id="view-certs" aria-label="Sertifikat saya"></section>
+    <section class="view" data-view="settings" id="view-settings" aria-label="Pengaturan"></section>
+    <section class="view" data-view="help" id="view-help" aria-label="Bantuan"></section>
+    <section class="view" data-view="about" id="view-about" aria-label="Tentang"></section>
+
+    <section class="view" data-view="credit" id="view-credit" aria-label="Credit">
+      <div class="credit">
+        <div>
+          <p class="eyebrow">Tentang Produk</p>
+          <h1>LixzQuis IQ</h1>
+          <p class="lead">Platform kuis edukasi untuk menguji pengetahuan lintas enam bidang. Setiap jawaban dinilai di server terhadap kunci jawaban yang telah ditetapkan, lalu hasilnya disimpan sebagai riwayat pribadi dan dapat diterbitkan sebagai sertifikat digital.</p>
+        </div>
+        <dl>
+          <div><dt>Nama produk</dt><dd>LixzQuis IQ</dd></div>
+          <div><dt>Versi aplikasi</dt><dd>2.0.0</dd></div>
+          <div><dt>Teknologi</dt><dd>HTML, CSS, dan JavaScript Vanilla, dengan API serverless dan Postgres</dd></div>
+          <div><dt>Pembuat</dt><dd>LixzQuis IQ</dd></div>
+          <div><dt>Ikon</dt><dd>Seluruh ikon dibuat sebagai SVG inline.</dd></div>
+          <div><dt>Sumber daya eksternal</dt><dd>Tidak ada pustaka pihak ketiga di sisi klien.</dd></div>
+          <div><dt>Penilaian</dt><dd>Hasil kuis dihitung di server berdasarkan jawaban pengguna yang dibandingkan dengan kunci jawaban.</dd></div>
+        </dl>
+      </div>
+    </section>
+  </main>
+
+  <nav class="tabbar" aria-label="Navigasi utama">
+    <button class="nav-btn" data-go="home" aria-label="Home"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg><span>Home</span></button>
+    <button class="nav-btn" data-go="quiz" aria-label="Kuis"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6"/><path d="M12 17h.01"/></svg><span>Kuis</span></button>
+    <button class="nav-btn" data-go="credit" aria-label="Credit"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9.3l-4 4 1 5.7L12 16.5 7 19l1-5.7-4-4 5.5-.8z"/></svg><span>Credit</span></button>
+  </nav>
+</div>
+
+<div class="scrim" id="scrim" data-close-menu></div>
+<aside class="menu" id="menuPanel" aria-hidden="true" aria-label="Menu tambahan">
+  <div class="menu-head" id="menuHead"></div>
+  <ul class="menu-list" id="menuList"></ul>
+</aside>
+
+<div class="modal-wrap" id="modalWrap" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <header class="modal-head">
+      <h2 id="modalTitle"></h2>
+      <button class="icon-btn" id="modalClose" aria-label="Tutup dialog"></button>
+    </header>
+    <div class="modal-body" id="modalBody"></div>
+    <footer class="modal-foot" id="modalFoot"></footer>
+  </div>
+</div>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div id="printArea"></div>
+
+<script>
+const APP_VERSION = '2.0.0';
+const KEYS = { token: 'lqiq.token', settings: 'lqiq.settings' };
+const DEFAULT_SETTINGS = { theme: 'dark', textSize: 'md', reduceMotion: false };
+const TABS = ['home', 'quiz', 'credit'];
+const FIELD_ID = { name: 'eName', email: 'eEmail', password: 'ePass', confirm: 'eConfirm' };
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+const ICONS = {
+  home: '<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>',
+  quiz: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6"/><path d="M12 17h.01"/>',
+  credit: '<path d="M12 3l2.5 5.5L20 9.3l-4 4 1 5.7L12 16.5 7 19l1-5.7-4-4 5.5-.8z"/>',
+  menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
+  eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  eyeOff: '<path d="M3 3l18 18"/><path d="M10.6 6.1A9.8 9.8 0 0 1 12 6c6.5 0 10 6 10 6a17 17 0 0 1-3.2 3.9"/><path d="M6.6 6.6A17 17 0 0 0 2 12s3.5 6 10 6a9.6 9.6 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>',
+  globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 3 2.5 15 0 18"/><path d="M12 3c-2.5 3-2.5 15 0 18"/>',
+  cpu: '<rect x="7" y="7" width="10" height="10" rx="2"/><path d="M10 2v3M14 2v3M10 19v3M14 19v3M2 10h3M2 14h3M19 10h3M19 14h3"/>',
+  flask: '<path d="M9 3h6"/><path d="M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/>',
+  book: '<path d="M4 4h6a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H4z"/><path d="M20 4h-6a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h7z"/>',
+  calc: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 8h8M8 13h.01M12 13h.01M16 13h.01M8 17h.01M12 17h.01M16 17h.01"/>',
+  lang: '<path d="M4 5h9M9 3v2M6 5c.5 3 2.5 6 5.5 8M11 5c-.5 3-2.5 6-5.5 8"/><path d="M13 21l4-9 4 9M14.5 18h5"/>',
+  check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  x: '<path d="M6 6l12 12M18 6L6 18"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  cert: '<circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 21l5-2.5L17 21l-1.5-7"/>',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/>',
+  history: '<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 7v5l3 2"/>',
+  settings: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>',
+  help: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6"/><path d="M12 17h.01"/>',
+  info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
+  logout: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/>',
+  share: '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/>',
+  copy: '<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>',
+  download: '<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>',
+  arrowLeft: '<path d="M19 12H5M11 6l-6 6 6 6"/>',
+  arrowRight: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',
+  inbox: '<path d="M3 13l3-8h12l3 8v6H3z"/><path d="M3 13h5l1 2h6l1-2h5"/>',
+  alert: '<path d="M12 3l10 18H2z"/><path d="M12 10v4M12 17h.01"/>',
+  info2: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>'
+};
+
+function icon(name, cls = 'ico') {
+  return `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name] || ''}</svg>`;
+}
+function logoMark() {
+  return `<span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg></span>`;
+}
+
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+function fmtDate(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+function fmtClock(sec) {
+  return `${String(Math.floor(sec / 60)).padStart(2, '0')}:${String(sec % 60).padStart(2, '0')}`;
+}
+function fmtDur(sec) {
+  const m = Math.floor(sec / 60), s = sec % 60;
+  return m ? `${m} menit ${s} detik` : `${s} detik`;
+}
+function firstName(name) { return String(name || '').trim().split(/\s+/)[0] || ''; }
+function initials(name) {
+  return String(name || '').trim().split(/\s+/).slice(0, 2).map((w) => w[0] || '').join('').toUpperCase() || 'LQ';
+}
+function periodOfDay() {
+  const h = new Date().getHours();
+  return h < 11 ? 'pagi' : h < 15 ? 'siang' : h < 18 ? 'sore' : 'malam';
+}
+
+function getSettings() {
+  try { return { ...DEFAULT_SETTINGS, ...JSON.parse(localStorage.getItem(KEYS.settings) || '{}') }; }
+  catch (e) { return { ...DEFAULT_SETTINGS }; }
+}
+function saveSettings(patch) {
+  try { localStorage.setItem(KEYS.settings, JSON.stringify({ ...getSettings(), ...patch })); }
+  catch (e) { toast('Pengaturan tidak dapat disimpan di browser ini.', 'error'); }
+  applySettings();
+}
+function applySettings() {
+  const s = getSettings();
+  const h = document.documentElement;
+  h.dataset.theme = s.theme === 'light' ? 'light' : 'dark';
+  h.dataset.size = ['sm', 'md', 'lg'].includes(s.textSize) ? s.textSize : 'md';
+  h.classList.toggle('reduce-motion', !!s.reduceMotion);
+}
+
+/* KLIEN API: semua data berasal dari /api (Postgres). Hanya token sesi yang disimpan di browser. */
+const api = {
+  async call(method, path, body) {
+    const token = getToken();
+    const headers = { 'Content-Type': 'application/json' };
+    if (token) headers.Authorization = 'Bearer ' + token;
+    let res;
+    try {
+      res = await fetch('/api' + path, { method, headers, body: body ? JSON.stringify(body) : undefined });
+    } catch (e) {
+      throw Object.assign(new Error('Tidak dapat terhubung ke server. Periksa koneksi Anda.'), { status: 0 });
+    }
+    let data = {};
+    try { data = await res.json(); } catch (e) { /* respons bukan JSON */ }
+    if (!res.ok) {
+      throw Object.assign(new Error(data.error || 'Terjadi kesalahan. Coba lagi.'), { status: res.status, field: data.field });
+    }
+    return data;
+  }
+};
+
+function getToken() {
+  return localStorage.getItem(KEYS.token) || sessionStorage.getItem(KEYS.token) || '';
+}
+function setToken(token, remember) {
+  clearToken();
+  (remember ? localStorage : sessionStorage).setItem(KEYS.token, token);
+}
+function clearToken() {
+  localStorage.removeItem(KEYS.token);
+  sessionStorage.removeItem(KEYS.token);
+}
+
+async function loadDashboard() {
+  state.data = await api.call('GET', '/dashboard');
+  state.user = state.data.user;
+}
+
+const state = {
+  user: null,
+  data: null,
+  quizzes: [],
+  passScore: 75,
+  view: 'auth',
+  history: [],
+  run: null,
+  lastAttempt: null,
+  certView: null,
+  lastQuizId: null
+};
+
+function go(view, opts = {}) {
+  if (state.run && !state.run.submitting && view !== 'run' && !opts.force) {
+    return confirmDialog(
+      'Keluar dari kuis?',
+      'Jawaban pada kuis yang sedang berjalan tidak akan disimpan.',
+      () => { abandonRun(); go(view, { ...opts, force: true }); },
+      'Keluar', 'Lanjutkan Kuis', true
+    );
+  }
+  if (opts.tab) state.history = [];
+  else if (state.view && state.view !== view && state.view !== 'auth') state.history.push(state.view);
+  show(view);
+}
+
+function goBack() {
+  if (state.run && !state.run.submitting) {
+    return confirmDialog(
+      'Keluar dari kuis?',
+      'Jawaban pada kuis yang sedang berjalan tidak akan disimpan.',
+      () => { abandonRun(); show(popHistory()); },
+      'Keluar', 'Lanjutkan Kuis', true
+    );
+  }
+  show(popHistory());
+}
+
+function popHistory() {
+  let v;
+  do { v = state.history.pop(); } while (v === 'run');
+  return v || (state.user ? 'home' : 'auth');
+}
+
+function show(view) {
+  if (view === 'auth') return showAuth();
+  state.view = view;
+  $$('.view').forEach((v) => v.classList.toggle('active', v.dataset.view === view));
+  $('#app').classList.toggle('in-run', view === 'run');
+  $('#app').classList.toggle('subscreen', !TABS.includes(view) && view !== 'run');
+  $$('.nav-btn').forEach((b) => {
+    const on = TABS.includes(view) && b.dataset.go === view;
+    b.classList.toggle('active', on);
+    if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+  });
+  window.scrollTo(0, 0);
+  render(view);
+}
+
+const RENDERERS = {
+  home: () => renderHome(),
+  quiz: () => renderQuizList(),
+  run: () => renderRun(),
+  result: () => renderResult(),
+  cert: () => renderCert(),
+  profile: () => renderProfile(),
+  history: () => renderHistory(),
+  certs: () => renderCertList(),
+  settings: () => renderSettings(),
+  help: () => renderHelp(),
+  about: () => renderAbout(),
+  credit: () => {}
+};
+function render(view) {
+  if (!state.user && view !== 'cert') return;
+  const fn = RENDERERS[view];
+  if (fn) fn();
+}
+
+function screenHead(title, eyebrow = '') {
+  return `<header class="screen-head">
+    <button class="icon-btn" data-back aria-label="Kembali">${icon('arrowLeft')}</button>
+    <div><p class="eyebrow">${esc(eyebrow)}</p><h1>${esc(title)}</h1></div>
+  </header>`;
+}
+
+let authMode = 'login';
+let authBusy = false;
+
+function setAuthMode(mode) {
+  authMode = mode;
+  $('#authCard').classList.toggle('is-register', mode === 'register');
+  $$('[data-auth-mode]').forEach((b) => {
+    const on = b.dataset.authMode === mode;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-selected', String(on));
+  });
+  $('#authTitle').textContent = mode === 'login' ? 'Masuk ke akun Anda' : 'Buat akun baru';
+  $('#authSub').textContent = mode === 'login'
+    ? 'Gunakan email dan password yang sudah terdaftar.'
+    : 'Lengkapi data berikut untuk mulai menggunakan LixzQuis IQ.';
+  $('#authForm').reset();
+  $('#fRemember').checked = true;
+  $$('[data-toggle]').forEach((btn) => {
+    document.getElementById(btn.dataset.toggle).type = 'password';
+    btn.innerHTML = icon('eye');
+    btn.setAttribute('aria-label', 'Tampilkan password');
+    btn.setAttribute('aria-pressed', 'false');
+  });
+  clearAuthErrors();
+  setAuthLoading(false);
+}
+
+function setErr(id, msg) {
+  const map = { eName: 'fName', eEmail: 'fEmail', ePass: 'fPass', eConfirm: 'fConfirm' };
+  $('#' + id).textContent = msg || '';
+  const input = document.getElementById(map[id]);
+  if (input) input.setAttribute('aria-invalid', msg ? 'true' : 'false');
+}
+function clearAuthErrors() {
+  ['eName', 'eEmail', 'ePass', 'eConfirm'].forEach((id) => setErr(id, ''));
+}
+function setAuthLoading(on) {
+  authBusy = on;
+  $('#submitBtn').disabled = on;
+  $('#submitSpin').hidden = !on;
+  $('#submitLabel').textContent = on ? 'Memproses...' : (authMode === 'login' ? 'Masuk' : 'Buat Akun');
+}
+function validatePassword(p) {
+  if (p.length < 8) return 'Password minimal 8 karakter.';
+  if (!/[A-Za-z]/.test(p) || !/\d/.test(p)) return 'Password harus memuat huruf dan angka.';
+  return '';
+}
+
+async function onAuthSubmit(e) {
+  e.preventDefault();
+  if (authBusy) return;
+  clearAuthErrors();
+
+  const name = $('#fName').value.trim();
+  const email = $('#fEmail').value.trim();
+  const pass = $('#fPass').value;
+  const confirm = $('#fConfirm').value;
+  const remember = $('#fRemember').checked;
+  const isReg = authMode === 'register';
+  let ok = true;
+
+  if (isReg) {
+    if (!name) { setErr('eName', 'Nama lengkap wajib diisi.'); ok = false; }
+    else if (name.length < 3) { setErr('eName', 'Nama lengkap minimal 3 karakter.'); ok = false; }
+  }
+  if (!email) { setErr('eEmail', 'Email wajib diisi.'); ok = false; }
+  else if (!EMAIL_RE.test(email)) { setErr('eEmail', 'Format email tidak valid.'); ok = false; }
+
+  if (!pass) { setErr('ePass', 'Password wajib diisi.'); ok = false; }
+  else if (isReg) {
+    const msg = validatePassword(pass);
+    if (msg) { setErr('ePass', msg); ok = false; }
+  }
+  if (isReg) {
+    if (!confirm) { setErr('eConfirm', 'Konfirmasi password wajib diisi.'); ok = false; }
+    else if (confirm !== pass) { setErr('eConfirm', 'Konfirmasi password tidak sama.'); ok = false; }
+  }
+  if (!ok) {
+    const first = $('#authForm [aria-invalid="true"]');
+    if (first) first.focus();
+    return;
+  }
+
+  setAuthLoading(true);
+  try {
+    const res = isReg
+      ? await api.call('POST', '/auth/register', { name, email, password: pass })
+      : await api.call('POST', '/auth/login', { email, password: pass });
+    setToken(res.token, remember);
+    await loadDashboard();
+    enterApp();
+    toast(isReg
+      ? `Akun berhasil dibuat. Selamat datang, ${firstName(state.user.name)}.`
+      : 'Berhasil masuk. Selamat datang kembali.', 'success');
+    go('home', { tab: true });
+  } catch (err) {
+    setErr(FIELD_ID[err.field] || 'ePass', err.message);
+    const first = $('#authForm [aria-invalid="true"]');
+    if (first) first.focus();
+  } finally {
+    setAuthLoading(false);
+  }
+}
+
+function enterApp() {
+  $('#auth').hidden = true;
+  $('#app').hidden = false;
+  $('#app').classList.remove('public');
+  $('#avatar').textContent = initials(state.user.name);
+  $('#greetLine').textContent = `Selamat ${periodOfDay()}, ${firstName(state.user.name)}`;
+}
+
+function showAuth() {
+  abandonRun();
+  state.user = null;
+  state.data = null;
+  state.history = [];
+  state.view = 'auth';
+  $('#app').hidden = true;
+  $('#app').classList.remove('public');
+  $('#auth').hidden = false;
+  setAuthMode('login');
+}
+
+async function logoutUser() {
+  try { await api.call('POST', '/auth/logout'); } catch (e) { /* sesi tetap dihapus di perangkat */ }
+  clearToken();
+  showAuth();
+  toast('Anda telah keluar.', 'success');
+}
+
+function toast(message, type = 'info') {
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.setAttribute('role', 'status');
+  t.innerHTML = `${icon(type === 'success' ? 'check' : type === 'error' ? 'alert' : 'info2')}<span>${esc(message)}</span>`;
+  $('#toasts').appendChild(t);
+  setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 300); }, 3200);
+}
+
+function busy(message) {
+  const el = document.createElement('div');
+  el.className = 'busy';
+  el.setAttribute('role', 'status');
+  el.innerHTML = `<div class="busy-card"><span class="spinner dark"></span><p>${esc(message)}</p></div>`;
+  document.body.appendChild(el);
+  return () => el.remove();
+}
+
+let modalReturnFocus = null;
+function openModal({ title, body, actions = [], wide = false }) {
+  modalReturnFocus = document.activeElement;
+  $('#modalTitle').textContent = title;
+  $('#modalBody').innerHTML = body;
+  const foot = $('#modalFoot');
+  foot.innerHTML = '';
+  actions.forEach((a) => {
+    const b = document.createElement('button');
+    b.className = `btn ${a.cls || 'ghost'}`;
+    b.textContent = a.label;
+    b.onclick = () => {
+      if (a.close !== false) closeModal();
+      if (a.onClick) a.onClick();
+    };
+    foot.appendChild(b);
+  });
+  foot.hidden = !actions.length;
+  $('.modal').classList.toggle('wide', wide);
+  const wrap = $('#modalWrap');
+  wrap.hidden = false;
+  requestAnimationFrame(() => wrap.classList.add('show'));
+  $('#modalClose').focus();
+}
+function closeModal() {
+  const wrap = $('#modalWrap');
+  wrap.classList.remove('show');
+  setTimeout(() => { if (!wrap.classList.contains('show')) wrap.hidden = true; }, 200);
+  if (modalReturnFocus && modalReturnFocus.focus) modalReturnFocus.focus();
+}
+function confirmDialog(title, text, onOk, okLabel = 'Ya', cancelLabel = 'Batal', danger = false) {
+  openModal({
+    title,
+    body: `<p class="muted">${esc(text)}</p>`,
+    actions: [
+      { label: cancelLabel, cls: 'ghost' },
+      { label: okLabel, cls: danger ? 'danger' : 'primary', onClick: onOk }
+    ]
+  });
+}
+function emptyState(title, text, label, attrs) {
+  return `<div class="empty">${icon('inbox')}<h3>${esc(title)}</h3><p>${esc(text)}</p><button class="btn primary small" ${attrs}>${esc(label)}</button></div>`;
+}
+
+async function startQuiz(id) {
+  try {
+    const { quiz } = await api.call('GET', '/quizzes/' + encodeURIComponent(id));
+    if (state.run) abandonRun();
+    state.run = {
+      quiz,
+      answers: new Array(quiz.questions.length).fill(null),
+      current: 0,
+      startedAt: Date.now(),
+      limit: quiz.minutes * 60,
+      submitting: false,
+      timer: null
+    };
+    state.lastQuizId = id;
+    state.history.push(state.view === 'result' || state.view === 'run' ? 'quiz' : state.view);
+    show('run');
+    startTimer();
+  } catch (e) {
+    toast(e.message, 'error');
+  }
+}
+
+function elapsed() { return state.run ? Math.floor((Date.now() - state.run.startedAt) / 1000) : 0; }
+function timeLeft() { return state.run ? Math.max(0, state.run.limit - elapsed()) : 0; }
+function startTimer() {
+  stopTimer();
+  state.run.timer = setInterval(tick, 1000);
+  updateTimer();
+}
+function tick() {
+  if (!state.run) return stopTimer();
+  updateTimer();
+  if (timeLeft() <= 0) {
+    stopTimer();
+    toast('Waktu habis. Kuis diselesaikan otomatis.', 'info');
+    submitRun();
+  }
+}
+function stopTimer() {
+  if (state.run && state.run.timer) {
+    clearInterval(state.run.timer);
+    state.run.timer = null;
+  }
+}
+function updateTimer() {
+  const el = $('#runTimer');
+  if (!el || !state.run) return;
+  const left = timeLeft();
+  el.textContent = fmtClock(left);
+  $('#runTimerBox').classList.toggle('warn', left <= 60);
+}
+function abandonRun() {
+  stopTimer();
+  state.run = null;
+}
+
+function renderRun() {
+  const r = state.run;
+  if (!r) return;
+  const total = r.quiz.questions.length;
+  const q = r.quiz.questions[r.current];
+  const answered = r.answers.filter((a) => a !== null).length;
+  const left = total - answered;
+  const isLast = r.current === total - 1;
+  const chosen = r.answers[r.current];
+
+  $('#view-run').innerHTML = `
+    <header class="run-head">
+      <button class="icon-btn" data-back aria-label="Keluar dari kuis">${icon('arrowLeft')}</button>
+      <div class="run-title-wrap">
+        <p class="eyebrow">${esc(r.quiz.category)}</p>
+        <h1 class="run-title">${esc(r.quiz.title)}</h1>
+      </div>
+      <div class="timer" id="runTimerBox">
+        <span>${icon('clock')}<b id="runTimer">--:--</b></span>
+        <small>tersisa</small>
+      </div>
+    </header>
+    <div class="run-meta"><span>Pertanyaan ${r.current + 1} dari ${total}</span><span>Dijawab ${answered}/${total}</span></div>
+    <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${r.current + 1}" aria-label="Progres pengerjaan"><span style="width:${((r.current + 1) / total) * 100}%"></span></div>
+    <article class="question glass"><p class="q-text">${esc(q.q)}</p></article>
+    <div class="options" role="group" aria-label="Pilihan jawaban">
+      ${q.o.map((text, i) => `
+        <button class="opt ${chosen === i ? 'selected' : ''}" data-opt="${i}" aria-pressed="${chosen === i}">
+          <span class="opt-letter">${'ABCD'[i]}</span><span>${esc(text)}</span>
+        </button>`).join('')}
+    </div>
+    <div class="dots" aria-label="Navigasi pertanyaan">
+      ${r.quiz.questions.map((_, i) => {
+        const done = r.answers[i] !== null;
+        return `<button class="dot ${done ? 'answered' : ''} ${i === r.current ? 'current' : ''}" data-dot="${i}" aria-label="Pertanyaan ${i + 1}${done ? ', sudah dijawab' : ''}" ${i === r.current ? 'aria-current="step"' : ''}>${i + 1}</button>`;
+      }).join('')}
+    </div>
+    <div class="run-nav">
+      <button class="btn ghost" data-prev ${r.current === 0 ? 'disabled' : ''}>${icon('arrowLeft')} Sebelumnya</button>
+      <button class="btn ghost" data-next ${isLast ? 'disabled' : ''}>Berikutnya ${icon('arrowRight')}</button>
+    </div>
+    <p class="run-warn" aria-live="polite">${left > 0 ? `Masih ada ${left} pertanyaan belum dijawab.` : 'Semua pertanyaan sudah dijawab.'}</p>
+    ${isLast ? `<button class="btn primary block" data-finish ${r.submitting ? 'disabled' : ''}>Selesaikan Kuis</button>` : ''}`;
+  updateTimer();
+}
+
+function selectAnswer(index) {
+  const r = state.run;
+  if (!r || r.submitting) return;
+  r.answers[r.current] = index;
+  renderRun();
+}
+
+function goTo(index) {
+  const r = state.run;
+  if (!r || r.submitting) return;
+  r.current = Math.max(0, Math.min(r.quiz.questions.length - 1, index));
+  renderRun();
+}
+
+function requestFinish() {
+  const r = state.run;
+  if (!r || r.submitting) return;
+  const left = r.answers.filter((a) => a === null).length;
+  const proceed = () => confirmDialog(
+    'Selesaikan kuis?',
+    'Setelah diselesaikan, jawaban tidak dapat diubah dan hasil akan disimpan ke riwayat.',
+    () => submitRun(), 'Selesaikan', 'Batal'
+  );
+  if (left > 0) {
+    confirmDialog(
+      'Masih ada pertanyaan belum dijawab',
+      `Terdapat ${left} pertanyaan yang belum dijawab. Pertanyaan tersebut dihitung salah jika Anda lanjutkan.`,
+      proceed, 'Tetap Selesaikan', 'Kembali ke Kuis'
+    );
+  } else {
+    proceed();
+  }
+}
+
+async function submitRun() {
+  const r = state.run;
+  if (!r || r.submitting) return;
+  r.submitting = true;
+  stopTimer();
+  renderRun();
+  const duration = Math.min(elapsed(), r.limit);
+  const hideBusy = busy('Menilai jawaban dan menyimpan hasil...');
+  try {
+    const res = await api.call('POST', '/attempts', {
+      quizId: r.quiz.id, answers: r.answers, durationSec: duration
+    });
+    state.run = null;
+    state.lastAttempt = res.attempt;
+    state.history = ['quiz'];
+    await loadDashboard();
+    hideBusy();
+    show('result');
+    if (res.attempt.passed) toast('Selamat, Anda dinyatakan lulus.', 'success');
+  } catch (e) {
+    hideBusy();
+    r.submitting = false;
+    toast(e.message, 'error');
+    if (state.run) renderRun();
+  }
+}
+
+function latestCert() {
+  return state.data && state.data.certificates[0] ? state.data.certificates[0] : null;
+}
+
+function certHTML(c) {
+  const sample = !c;
+  return `
+  <article class="cert" aria-label="${sample ? 'Contoh sertifikat' : 'Sertifikat pencapaian'}">
+    <div class="cert-frame">
+      <header class="cert-top">${logoMark()}<span>LixzQuis IQ</span></header>
+      <h3 class="cert-title">CERTIFICATE OF ACHIEVEMENT</h3>
+      <p class="cert-given">Diberikan kepada</p>
+      <p class="cert-name">${esc(c ? c.ownerName : 'Nama Lengkap Pengguna')}</p>
+      <p class="cert-body">Telah menyelesaikan kuis <b>${esc(c ? c.quizTitle : 'Nama Kuis')}</b> dengan nilai akhir <b>${c ? esc(c.score) + '/100' : '—'}</b> dan predikat <b>${esc(c ? c.predicate : '—')}</b>.</p>
+      <div class="cert-row">
+        <div><small>Nilai Akhir</small><span>${c ? esc(c.score) : '—'}</span></div>
+        <div><small>Predikat Kelulusan</small><span>${esc(c ? c.predicate : '—')}</span></div>
+        <div><small>Tanggal Penerbitan</small><span>${c ? esc(fmtDate(c.issuedAt)) : '—'}</span></div>
+      </div>
+      <div class="cert-foot">
+        <div class="code-box"><small>Kode Sertifikat</small><span>${esc(c ? c.id : 'LQIQ-XXXX-XXXXXX')}</span></div>
+        <div class="sign">
+          <span class="sig-hand" role="img" aria-label="Tanda tangan Lixzy">Lixzy</span>
+          <span class="sig-name">LixzyGanzx</span>
+          <small>Penandatangan</small>
+        </div>
+      </div>
+    </div>
+    ${sample ? '<span class="cert-stamp">CONTOH SERTIFIKAT</span>' : ''}
+  </article>`;
+}
+
+function certLink(id) {
+  const base = location.href.split('?')[0].split('#')[0];
+  return `${base}?certificate=${encodeURIComponent(id)}`;
+}
+function shareMessage(link) {
+  return `Saya telah menyelesaikan kuis di LixzQuis IQ dan memperoleh sertifikat pencapaian. Lihat sertifikat saya melalui tautan berikut: ${link}`;
+}
+
+async function copyText(text) {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch (e) { /* lanjut ke fallback */ }
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.setAttribute('readonly', '');
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+  ta.remove();
+  return ok;
+}
+
+async function copyCertificateLink(cert) {
+  const link = certLink(cert.id);
+  const ok = await copyText(link);
+  if (ok) toast('Link sertifikat berhasil disalin.', 'success');
+  else toast('Gagal menyalin otomatis. Tautan: ' + link, 'error');
+}
+
+async function shareCertificate(cert) {
+  const link = certLink(cert.id);
+  const text = shareMessage(link);
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: 'Sertifikat LixzQuis IQ', text, url: link });
+      toast('Sertifikat berhasil dibagikan.', 'success');
+      return;
+    } catch (e) {
+      if (e && e.name === 'AbortError') return;
+    }
+  }
+  const ok = await copyText(text);
+  if (ok) toast('Pesan berbagi disalin. Tempelkan di aplikasi tujuan.', 'success');
+  else toast('Gagal menyalin. Tautan: ' + link, 'error');
+}
+
+function downloadCertificate(cert) {
+  $('#printArea').innerHTML = certHTML(cert);
+  toast('Pilih "Simpan sebagai PDF" pada dialog cetak.', 'info');
+  setTimeout(() => window.print(), 250);
+}
+window.addEventListener('afterprint', () => { $('#printArea').innerHTML = ''; });
+
+async function fetchCert(id) {
+  const data = await api.call('GET', '/certificates/' + encodeURIComponent(id));
+  return data.certificate;
+}
+
+async function openCert(id, opts = {}) {
+  state.certView = await fetchCert(id);
+  go('cert', opts);
+}
+
+async function resolveCert(id) {
+  const local = state.data && state.data.certificates.find((c) => c.id === id);
+  if (local) return local;
+  return fetchCert(id);
+}
+
+async function certAction(act, id) {
+  try {
+    if (act === 'view') return await openCert(id);
+    const c = await resolveCert(id);
+    if (act === 'pdf') downloadCertificate(c);
+    if (act === 'copy') copyCertificateLink(c);
+    if (act === 'share') shareCertificate(c);
+  } catch (e) {
+    toast(e.message, 'error');
+  }
+}
+
+function openCertPreview(cert) {
+  openModal({
+    title: cert ? 'Pratinjau Sertifikat' : 'Pratinjau Contoh Sertifikat',
+    wide: true,
+    body: `<div class="modal-cert">${certHTML(cert)}</div>
+      <p class="muted small">${cert
+        ? 'Pratinjau sertifikat Anda yang tersimpan di database.'
+        : 'Ini adalah contoh tampilan. Sertifikat asli hanya tersedia setelah Anda lulus kuis.'}</p>`,
+    actions: [{ label: 'Tutup', cls: 'ghost' }]
+  });
+}
+
+function explainNoCert() {
+  openModal({
+    title: 'Sertifikat belum tersedia',
+    body: `<p class="muted">Sertifikat baru akan tersedia setelah Anda menyelesaikan kuis dan memenuhi nilai kelulusan ${state.passScore}. Pratinjau di beranda hanya contoh.</p>`,
+    actions: [
+      { label: 'Mulai Kuis', cls: 'primary', onClick: () => go('quiz', { tab: true }) },
+      { label: 'Tutup', cls: 'ghost' }
+    ]
+  });
+}
+
+function rowItem(a) {
+  return `<li class="row-item">
+    <div><strong>${esc(a.quizTitle)}</strong><small>${fmtDate(a.finishedAt)} · Percobaan ke-${a.attemptNo}</small></div>
+    <div class="row-end">
+      <span class="score">${a.score}</span>
+      <span class="pill ${a.passed ? 'ok' : 'bad'}">${a.passed ? 'Lulus' : 'Belum lulus'}</span>
+      ${a.certificateId ? `<button class="btn small ghost" data-cert-id="${esc(a.certificateId)}" data-cert-act="view">Sertifikat</button>` : ''}
+    </div>
+  </li>`;
+}
+
+function renderHome() {
+  const { stats, attempts, certificates } = state.data;
+  const recent = attempts.slice(0, 5);
+  const latest = certificates[0] || null;
+
+  $('#view-home').innerHTML = `
+    <section class="hero">
+      <p class="eyebrow">Selamat ${periodOfDay()}, ${esc(firstName(state.user.name))}</p>
+      <h1>Uji Pengetahuanmu.</h1>
+      <p class="lead">LixzQuis IQ menghadirkan kuis pilihan ganda 30 soal di enam bidang, dengan penilaian yang transparan dan sertifikat digital untuk setiap pencapaian.</p>
+      <div class="cta-row">
+        <button class="btn primary" data-go="quiz">Mulai Kuis ${icon('arrowRight')}</button>
+        <button class="btn ghost" data-act="scroll-cert">Lihat Sertifikat</button>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="Statistik pengguna">
+      <div class="stat"><span>Kuis diselesaikan</span><strong>${stats.total}</strong></div>
+      <div class="stat"><span>Total jawaban benar</span><strong>${stats.correct}</strong></div>
+      <div class="stat"><span>Rata-rata nilai</span><strong>${stats.avg}</strong></div>
+      <div class="stat"><span>Sertifikat diperoleh</span><strong>${stats.certs}</strong></div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-head"><h2>Rekomendasi Kuis</h2><button class="link" data-go="quiz">Lihat semua</button></div>
+      <ul class="cat-list">
+        ${state.quizzes.map((q) => `
+          <li>
+            <button class="cat-row" data-start="${esc(q.id)}">
+              ${icon(q.icon)}
+              <span class="cat-text"><strong>${esc(q.category)}</strong><small>${esc(q.desc)}</small></span>
+              <span class="cat-meta">${q.questionCount} soal<br>${esc(q.difficulty)}</span>
+            </button>
+          </li>`).join('')}
+      </ul>
+    </section>
+
+    <section class="sec">
+      <div class="sec-head"><h2>Aktivitas Terakhir</h2>${attempts.length ? '<button class="link" data-menu="history">Lihat semua</button>' : ''}</div>
+      ${recent.length
+        ? `<ul class="list">${recent.map(rowItem).join('')}</ul>`
+        : emptyState('Belum ada aktivitas', 'Anda belum mengikuti kuis. Mulai kuis pertama untuk melihat riwayat dan perkembangan Anda di sini.', 'Mulai Mengerjakan Kuis', 'data-go="quiz"')}
+    </section>
+
+    <section class="sec cert-section" id="certSection">
+      <div>
+        <p class="eyebrow">Sertifikat</p>
+        <h2>Sertifikat Digital</h2>
+        <p class="muted" style="margin-top:6px">Cari sertifikat dengan kodenya, atau lihat sertifikat Anda sendiri.</p>
+        <form class="search" id="certSearch" role="search">
+          <label class="sr-only" for="certCode">Kode sertifikat</label>
+          <input id="certCode" type="text" placeholder="Contoh: LQIQ-2026-A1B2C3" autocomplete="off" maxlength="20" spellcheck="false">
+          <button class="btn primary small" type="submit">${icon('search')} Cari</button>
+        </form>
+        <p class="err" id="searchMsg" role="status"></p>
+        <div class="cta-row">
+          <button class="btn ghost small" data-act="preview-latest">Lihat Pratinjau</button>
+          <button class="btn ghost small" data-act="view-latest">Lihat Sertifikat Saya</button>
+          <button class="btn ghost small" data-act="share-latest">Bagikan Sertifikat</button>
+        </div>
+        ${latest ? '' : `<p class="note-box" style="margin-top:14px">${icon('info')}<span>Sertifikat baru akan tersedia setelah Anda menyelesaikan kuis dan memenuhi nilai kelulusan ${state.passScore}. Pratinjau di samping adalah contoh.</span></p>`}
+      </div>
+      <div class="preview-wrap glass">${certHTML(latest)}</div>
+    </section>`;
+}
+
+function renderQuizList() {
+  const attempts = state.data.attempts;
+  const best = (id) => {
+    const scores = attempts.filter((a) => a.quizId === id).map((a) => a.score);
+    return scores.length ? Math.max(...scores) : null;
+  };
+  $('#view-quiz').innerHTML = `
+    <header class="page-head">
+      <p class="eyebrow">Katalog Kuis</p>
+      <h1>Pilih Kuis</h1>
+      <p class="lead">Setiap kuis terdiri dari 30 soal pilihan ganda dengan empat jawaban. Nilai kelulusan adalah ${state.passScore} dari 100.</p>
+    </header>
+    <div class="quiz-grid">
+      ${state.quizzes.map((q) => {
+        const b = best(q.id);
+        return `
+        <article class="quiz-card">
+          <div class="qc-top">${icon(q.icon)}<span class="tag">${esc(q.category)}</span></div>
+          <h2>${esc(q.title)}</h2>
+          <p>${esc(q.desc)}</p>
+          <dl class="qc-meta">
+            <div><dt>Soal</dt><dd>${q.questionCount}</dd></div>
+            <div><dt>Estimasi</dt><dd>${q.minutes} menit</dd></div>
+            <div><dt>Kesulitan</dt><dd>${esc(q.difficulty)}</dd></div>
+            <div><dt>Lulus</dt><dd>≥ ${state.passScore}</dd></div>
+          </dl>
+          <div class="qc-foot">
+            <span class="muted small">${b === null ? 'Belum pernah dikerjakan' : 'Skor terbaik: ' + b}</span>
+            <button class="btn primary small" data-start="${esc(q.id)}">Mulai Kuis</button>
+          </div>
+        </article>`;
+      }).join('')}
+    </div>`;
+}
+
+function renderResult() {
+  const a = state.lastAttempt;
+  if (!a) return show('quiz');
+  const C = 2 * Math.PI * 54;
+  const off = C * (1 - a.score / 100);
+
+  const actions = a.passed
+    ? (a.certificateId ? `
+        <button class="btn primary" data-cert-id="${esc(a.certificateId)}" data-cert-act="view">Lihat Sertifikat</button>
+        <button class="btn ghost" data-cert-id="${esc(a.certificateId)}" data-cert-act="pdf">${icon('download')} Unduh Sertifikat PDF</button>
+        <button class="btn ghost" data-cert-id="${esc(a.certificateId)}" data-cert-act="copy">${icon('copy')} Salin Link Sertifikat</button>
+        <button class="btn ghost" data-cert-id="${esc(a.certificateId)}" data-cert-act="share">${icon('share')} Bagikan Sertifikat</button>` : '')
+    : `<button class="btn primary" data-act="retry">Coba Lagi</button>
+       <button class="btn ghost" data-menu="history">Lihat Riwayat</button>`;
+
+  $('#view-result').innerHTML = `
+    ${screenHead('Hasil Kuis', `Percobaan ke-${a.attemptNo}`)}
+    <p class="muted" style="margin:-10px 0 20px">${esc(a.quizTitle)} · ${esc(state.user.name)} · ${fmtDate(a.finishedAt)}</p>
+
+    <section class="result-hero glass">
+      <div class="ring ${a.passed ? 'pass' : 'fail'}">
+        <svg viewBox="0 0 120 120" aria-hidden="true">
+          <circle class="ring-bg" cx="60" cy="60" r="54"/>
+          <circle class="ring-fg" id="ringFg" cx="60" cy="60" r="54" stroke-dasharray="${C.toFixed(2)}" stroke-dashoffset="${C.toFixed(2)}"/>
+        </svg>
+        <div class="ring-val"><strong>${a.score}</strong><small>dari 100</small></div>
+      </div>
+      <div class="result-side">
+        <span class="pill ${a.passed ? 'ok' : 'bad'}">${a.passed ? 'Lulus' : 'Belum Lulus'}</span>
+        <p>Predikat: <b>${esc(a.predicate)}</b></p>
+        <p class="muted">${a.passed
+          ? 'Selamat, nilai Anda memenuhi standar kelulusan. Sertifikat digital telah dibuat dari hasil ini.'
+          : `Nilai kelulusan adalah ${state.passScore}. Hasil ini tetap tersimpan di riwayat sebagai catatan perkembangan Anda.`}</p>
+      </div>
+    </section>
+
+    <dl class="stat-grid">
+      <div><dt>Jawaban benar</dt><dd>${a.correct}</dd></div>
+      <div><dt>Jawaban salah</dt><dd>${a.wrong}</dd></div>
+      <div><dt>Soal dijawab</dt><dd>${a.answered}/${a.total}</dd></div>
+      <div><dt>Durasi pengerjaan</dt><dd>${fmtDur(a.durationSec)}</dd></div>
+      <div><dt>Tanggal pengerjaan</dt><dd>${fmtDate(a.finishedAt)}</dd></div>
+      <div><dt>Status</dt><dd>${a.passed ? 'Lulus' : 'Belum lulus'}</dd></div>
+    </dl>
+
+    <div class="result-actions">${actions}</div>
+    <button class="link center-link" data-go="quiz">Kembali ke Katalog Kuis</button>`;
+
+  requestAnimationFrame(() => {
+    const fg = $('#ringFg');
+    if (fg) fg.setAttribute('stroke-dashoffset', off.toFixed(2));
+  });
+}
+
+function renderCert() {
+  const c = state.certView;
+  if (!c) {
+    $('#view-cert').innerHTML = screenHead('Sertifikat') + emptyState('Sertifikat tidak ditemukan', 'Periksa kembali kode atau tautan yang Anda buka.', 'Kembali', 'data-back');
+    return;
+  }
+  const back = state.user ? '' : `<button class="link" data-back>Masuk ke LixzQuis IQ</button>`;
+  $('#view-cert').innerHTML = `
+    <div class="cert-page">
+      ${state.user ? screenHead('Sertifikat Digital', 'Verifikasi database') : ''}
+      <div class="cert-stage">${certHTML(c)}</div>
+      <p class="note-box">${icon('check')}<span>Sertifikat terdaftar di database LixzQuis IQ dengan kode <b>${esc(c.id)}</b>.</span></p>
+      <div class="cert-actions">
+        <button class="btn primary" data-cert-id="${esc(c.id)}" data-cert-act="pdf">${icon('download')} Unduh Sertifikat PDF</button>
+        <button class="btn ghost" data-cert-id="${esc(c.id)}" data-cert-act="copy">${icon('copy')} Salin Link Sertifikat</button>
+        <button class="btn ghost" data-cert-id="${esc(c.id)}" data-cert-act="share">${icon('share')} Bagikan Sertifikat</button>
+      </div>
+      ${back}
+    </div>`;
+}
+
+function renderProfile() {
+  const u = state.user;
+  const s = state.data.stats;
+  $('#view-profile').innerHTML = `
+    ${screenHead('Profil Saya', 'Akun')}
+    <div class="profile">
+      <span class="avatar lg">${esc(initials(u.name))}</span>
+      <div><strong>${esc(u.name)}</strong><span>${esc(u.email)}</span></div>
+    </div>
+    <dl class="stat-grid">
+      <div><dt>Kuis diselesaikan</dt><dd>${s.total}</dd></div>
+      <div><dt>Jawaban benar</dt><dd>${s.correct}</dd></div>
+      <div><dt>Rata-rata nilai</dt><dd>${s.avg}</dd></div>
+      <div><dt>Jumlah sertifikat</dt><dd>${s.certs}</dd></div>
+    </dl>
+    <p class="muted small">Bergabung sejak ${fmtDate(u.createdAt)}</p>`;
+}
+
+function renderHistory() {
+  const list = state.data.attempts;
+  $('#view-history').innerHTML = `
+    ${screenHead('Riwayat Kuis', 'Aktivitas')}
+    ${list.length
+      ? `<ul class="list">${list.map(rowItem).join('')}</ul>`
+      : emptyState('Belum ada riwayat', 'Riwayat kuis akan muncul setelah Anda menyelesaikan kuis pertama.', 'Mulai Kuis', 'data-go="quiz"')}`;
+}
+
+function renderCertList() {
+  const list = state.data.certificates;
+  $('#view-certs').innerHTML = `
+    ${screenHead('Sertifikat Saya', 'Koleksi')}
+    ${list.length
+      ? `<ul class="list">${list.map((c) => `
+          <li class="row-item">
+            <div><strong>${esc(c.quizTitle)}</strong><small>${esc(c.id)} · ${fmtDate(c.issuedAt)}</small></div>
+            <div class="row-end">
+              <span class="score">${c.score}</span>
+              <button class="btn small ghost" data-cert-id="${esc(c.id)}" data-cert-act="view">Lihat</button>
+              <button class="btn small ghost" data-cert-id="${esc(c.id)}" data-cert-act="share">Bagikan</button>
+            </div>
+          </li>`).join('')}</ul>`
+      : emptyState('Belum ada sertifikat', 'Sertifikat baru akan tersedia setelah Anda menyelesaikan kuis dan memenuhi nilai kelulusan.', 'Mulai Kuis', 'data-go="quiz"')}`;
+}
+
+function renderSettings() {
+  const s = getSettings();
+  $('#view-settings').innerHTML = `
+    ${screenHead('Pengaturan', 'Preferensi')}
+    <div class="set-block">
+      <fieldset class="field-set">
+        <legend>Mode tampilan</legend>
+        <label class="radio"><input type="radio" name="theme" value="dark" ${s.theme === 'dark' ? 'checked' : ''}> Mode gelap</label>
+        <label class="radio"><input type="radio" name="theme" value="light" ${s.theme === 'light' ? 'checked' : ''}> Mode terang</label>
+      </fieldset>
+      <label class="field-inline">Ukuran teks
+        <select id="setSize">
+          <option value="sm" ${s.textSize === 'sm' ? 'selected' : ''}>Kecil</option>
+          <option value="md" ${s.textSize === 'md' ? 'selected' : ''}>Standar</option>
+          <option value="lg" ${s.textSize === 'lg' ? 'selected' : ''}>Besar</option>
+        </select>
+      </label>
+      <label class="field-inline">Kurangi animasi
+        <input type="checkbox" id="setMotion" ${s.reduceMotion ? 'checked' : ''} style="width:18px;height:18px;accent-color:var(--accent)">
+      </label>
+    </div>
+    <button class="btn ghost" data-act="reset-settings">Atur Ulang Pengaturan Tampilan</button>`;
+}
+
+function renderHelp() {
+  $('#view-help').innerHTML = `
+    ${screenHead('Bantuan', 'Panduan')}
+    <div class="help-block"><h2>Menggunakan website</h2><p>Gunakan navigasi bawah untuk berpindah antara Home, Kuis, dan Credit. Menu di pojok kanan atas berisi profil, riwayat, sertifikat, pengaturan, dan keluar. Gunakan tombol panah di kiri atas untuk kembali.</p></div>
+    <div class="help-block"><h2>Cara mengikuti kuis</h2><p>Pilih kuis dari katalog, lalu jawab 30 soal dengan memilih salah satu dari empat pilihan. Gunakan tombol Sebelumnya dan Berikutnya, atau angka di bawah untuk berpindah soal. Jawaban yang sudah dipilih tetap tersimpan. Tombol Selesaikan Kuis tampil di soal terakhir. Kuis juga selesai otomatis saat waktu habis.</p></div>
+    <div class="help-block"><h2>Cara mendapatkan sertifikat</h2><p>Sertifikat dibuat otomatis jika nilai Anda mencapai ${state.passScore} atau lebih. Jika belum lulus, hasil tetap disimpan dan Anda dapat mencoba lagi.</p></div>
+    <div class="help-block"><h2>Cara mencari dan membagikan sertifikat</h2><p>Di beranda, masukkan kode sertifikat pada kolom pencarian. Sertifikat yang ditemukan dapat dibagikan melalui menu berbagi perangkat, atau disalin sebagai tautan.</p></div>`;
+}
+
+function renderAbout() {
+  $('#view-about').innerHTML = `
+    ${screenHead('Tentang LixzQuis IQ', 'Produk')}
+    <div class="help-block">
+      <p>LixzQuis IQ adalah platform kuis edukasi dengan penilaian otomatis dan sertifikat digital.</p>
+      <p>Versi ${APP_VERSION}. Data akun, riwayat, dan sertifikat disimpan di database Postgres, dan sesi login disimpan di perangkat ini.</p>
+    </div>`;
+}
+
+function openMenu() {
+  const u = state.user;
+  if (u) {
+    $('#menuHead').innerHTML = `
+      <span class="avatar">${esc(initials(u.name))}</span>
+      <div class="who"><strong>${esc(u.name)}</strong><small>${esc(u.email)}</small></div>
+      <button class="icon-btn" data-close-menu aria-label="Tutup menu">${icon('x')}</button>`;
+  }
+  $('#menuPanel').classList.add('open');
+  $('#menuPanel').setAttribute('aria-hidden', 'false');
+  $('#scrim').classList.add('show');
+  $('#menuBtn').setAttribute('aria-expanded', 'true');
+}
+function closeMenu() {
+  $('#menuPanel').classList.remove('open');
+  $('#menuPanel').setAttribute('aria-hidden', 'true');
+  $('#scrim').classList.remove('show');
+  $('#menuBtn').setAttribute('aria-expanded', 'false');
+}
+
+function menuAction(act) {
+  if (act === 'logout') {
+    return confirmDialog(
+      'Keluar dari akun?',
+      'Sesi Anda di perangkat ini akan dihapus. Data akun dan riwayat tetap tersimpan di database.',
+      () => { abandonRun(); logoutUser(); },
+      'Keluar', 'Batal', true
+    );
+  }
+  const views = { profile: 'profile', history: 'history', certs: 'certs', settings: 'settings', help: 'help', about: 'about' };
+  if (views[act]) go(views[act]);
+}
+
+function runAction(a) {
+  switch (a) {
+    case 'scroll-cert': {
+      const el = $('#certSection');
+      if (el) el.scrollIntoView({ behavior: getSettings().reduceMotion ? 'auto' : 'smooth', block: 'start' });
+      break;
+    }
+    case 'preview-latest': openCertPreview(latestCert()); break;
+    case 'view-latest': {
+      const c = latestCert();
+      if (c) openCert(c.id).catch((e) => toast(e.message, 'error'));
+      else explainNoCert();
+      break;
+    }
+    case 'share-latest': {
+      const c = latestCert();
+      if (c) shareCertificate(c); else explainNoCert();
+      break;
+    }
+    case 'retry': if (state.lastQuizId) startQuiz(state.lastQuizId); break;
+    case 'reset-settings':
+      confirmDialog('Atur ulang tampilan?', 'Pengaturan mode, ukuran teks, dan animasi akan kembali ke standar.', () => {
+        saveSettings({ ...DEFAULT_SETTINGS });
+        toast('Pengaturan tampilan dikembalikan.', 'success');
+        render('settings');
+      }, 'Atur Ulang', 'Batal', true);
+      break;
+  }
+}
+
+document.addEventListener('click', (e) => {
+  if (e.target.id === 'modalWrap') return closeModal();
+  const el = e.target.closest('[data-go],[data-start],[data-act],[data-menu],[data-back],[data-opt],[data-dot],[data-prev],[data-next],[data-finish],[data-cert-act],[data-close-menu]');
+  if (!el) return;
+
+  if (el.hasAttribute('data-close-menu')) return closeMenu();
+  if (el.dataset.go) { closeMenu(); return go(el.dataset.go, { tab: TABS.includes(el.dataset.go) }); }
+  if (el.dataset.start) return startQuiz(el.dataset.start);
+  if (el.dataset.menu) { closeMenu(); return menuAction(el.dataset.menu); }
+  if (el.hasAttribute('data-back')) return goBack();
+  if (el.dataset.opt !== undefined) return selectAnswer(Number(el.dataset.opt));
+  if (el.dataset.dot !== undefined) return goTo(Number(el.dataset.dot));
+  if (el.hasAttribute('data-prev') && state.run) return goTo(state.run.current - 1);
+  if (el.hasAttribute('data-next') && state.run) return goTo(state.run.current + 1);
+  if (el.hasAttribute('data-finish')) return requestFinish();
+  if (el.dataset.certAct) return certAction(el.dataset.certAct, el.dataset.certId);
+  if (el.dataset.act) return runAction(el.dataset.act);
+});
+
+document.addEventListener('submit', async (e) => {
+  if (e.target.id !== 'certSearch') return;
+  e.preventDefault();
+  const msg = $('#searchMsg');
+  const code = $('#certCode').value.trim().toUpperCase();
+  msg.textContent = '';
+  if (!code) { msg.textContent = 'Masukkan kode sertifikat terlebih dahulu.'; return; }
+  try {
+    await openCert(code);
+  } catch (err) {
+    msg.textContent = err.message;
+  }
+});
+
+document.addEventListener('change', (e) => {
+  const t = e.target;
+  if (t.name === 'theme') saveSettings({ theme: t.value });
+  else if (t.id === 'setSize') saveSettings({ textSize: t.value });
+  else if (t.id === 'setMotion') saveSettings({ reduceMotion: t.checked });
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  if (!$('#modalWrap').hidden) return closeModal();
+  if ($('#menuPanel').classList.contains('open')) closeMenu();
+});
+
+function buildStatic() {
+  $('#menuBtn').innerHTML = icon('menu');
+  $('#modalClose').innerHTML = icon('x');
+  $('#modalClose').onclick = closeModal;
+  $('#menuList').innerHTML = [
+    { act: 'profile', label: 'Profil Saya', icon: 'user' },
+    { act: 'history', label: 'Riwayat Kuis', icon: 'history' },
+    { act: 'certs', label: 'Sertifikat Saya', icon: 'cert' },
+    { act: 'settings', label: 'Pengaturan', icon: 'settings' },
+    { act: 'help', label: 'Bantuan', icon: 'help' },
+    { act: 'about', label: 'Tentang LixzQuis IQ', icon: 'info' },
+    { act: 'logout', label: 'Logout', icon: 'logout', danger: true }
+  ].map((item) => `<li><button class="menu-item ${item.danger ? 'danger' : ''}" data-menu="${item.act}">${icon(item.icon)}<span>${esc(item.label)}</span></button></li>`).join('');
+  $('#menuBtn').addEventListener('click', openMenu);
+
+  $$('.nav-btn').forEach((b) => {
+    const label = b.querySelector('span')?.textContent || '';
+    const name = { Home: 'home', Kuis: 'quiz', Credit: 'credit' }[label];
+    const old = b.querySelector('svg');
+    if (name && old) old.outerHTML = icon(name);
+  });
+
+  $('#authForm').addEventListener('submit', onAuthSubmit);
+  $$('[data-auth-mode]').forEach((b) => b.addEventListener('click', () => setAuthMode(b.dataset.authMode)));
+  $$('[data-toggle]').forEach((btn) => {
+    btn.innerHTML = icon('eye');
+    btn.addEventListener('click', () => {
+      const input = document.getElementById(btn.dataset.toggle);
+      const show = input.type === 'password';
+      input.type = show ? 'text' : 'password';
+      btn.innerHTML = icon(show ? 'eyeOff' : 'eye');
+      btn.setAttribute('aria-label', show ? 'Sembunyikan password' : 'Tampilkan password');
+      btn.setAttribute('aria-pressed', String(show));
+    });
+  });
+}
+
+async function init() {
+  applySettings();
+  buildStatic();
+  setAuthMode('login');
+
+  try {
+    const meta = await api.call('GET', '/quizzes');
+    state.quizzes = meta.quizzes;
+    state.passScore = meta.passScore;
+  } catch (e) {
+    toast(e.message, 'error');
+  }
+
+  const certParam = new URLSearchParams(location.search).get('certificate');
+
+  if (getToken()) {
+    try {
+      await loadDashboard();
+      enterApp();
+      if (certParam) {
+        try { await openCert(certParam.trim().toUpperCase(), { tab: true }); return; }
+        catch (e) { toast(e.message, 'error'); }
+      }
+      go('home', { tab: true });
+      return;
+    } catch (e) {
+      if (e.status === 401) clearToken();
+      else toast(e.message, 'error');
+    }
+  }
+
+  if (certParam) {
+    $('#auth').hidden = true;
+    $('#app').hidden = false;
+    $('#app').classList.add('public');
+    try {
+      await openCert(certParam.trim().toUpperCase(), { tab: true });
+      return;
+    } catch (e) {
+      toast(e.message, 'error');
+    }
+  }
+  showAuth();
+}
+
+init();
+</script>
+</body>
+</html>
